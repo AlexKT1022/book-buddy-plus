@@ -1,17 +1,24 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=22"
+  },
   "main": "index.js",
+  "imports": {
+    "#*": "./*.js"
+  },
   "keywords": [],
   "scripts": {
     "db:reset": "npm run db:schema && npm run db:seed",
-    "db:schema": "psql -d jukebox_pro -f db/schema.sql",
-    "db:seed": "node --env-file=.env db/seed.js",
-    "dev": "node --watch --env-file=.env server.js",
-    "start": "node --env-file=.env server.js",
+    "db:schema": "psql -d book_buddy -f db/schema.sql",
+    "db:seed": "node --env-file=../.env db/seed.js",
+    "dev": "node --watch --env-file=../.env server.js",
+    "start": "node --env-file=../.env server.js",
     "test": "vitest"
   },
   "dependencies": {
