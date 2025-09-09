@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS reservation_items;
+
 DROP TABLE IF EXISTS reservations;
 
 DROP TABLE IF EXISTS users;
@@ -23,6 +25,11 @@ CREATE TABLE reservations (
   id serial PRIMARY KEY,
   check_in DATE NOT NULL,
   check_out DATE,
-  user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+  user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE
+);
+
+CREATE TABLE reservation_items (
+  id serial PRIMARY KEY,
+  reservation_id INTEGER NOT NULL REFERENCES reservations (id) ON DELETE CASCADE,
   book_id INTEGER UNIQUE NOT NULL REFERENCES books (id) ON DELETE CASCADE
 );

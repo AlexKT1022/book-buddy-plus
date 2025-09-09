@@ -1,5 +1,6 @@
 import db from '#db/client';
 import { createBook, getRandomBook } from '#db/queries/booksQueries';
+import { createReservationItem } from '#db/queries/reservationItemsQueries';
 import { createReservation } from '#db/queries/reservationQueries';
 import { createUser } from '#db/queries/userQueries';
 
@@ -25,12 +26,13 @@ const seed = async () => {
     'email@email.com',
     'password'
   );
+  const checkInDate = new Date();
+  const reservation = await createReservation(checkInDate, user.id);
 
   for (let i = 0; i < 5; i++) {
     const randomBook = await getRandomBook();
-    const checkInDate = new Date();
 
-    await createReservation(checkInDate, user.id, randomBook.id);
+    await createReservationItem(reservation.id, randomBook.id);
   }
 };
 
