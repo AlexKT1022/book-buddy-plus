@@ -1,0 +1,27 @@
+{
+  "name": "book-buddy-plus",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=22"
+  },
+  "main": "index.js",
+  "imports": {
+    "#*": "./*.js"
+  },
+  "keywords": [],
+  "scripts": {
+    "dev-backend": "npm run dev --prefix backend",
+    "dev-frontend": "npm run dev --prefix frontend"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "prettier-plugin-embed": "^0.5.0",
+    "prettier-plugin-organize-imports": "^4.2.0",
+    "prettier-plugin-pkg": "^0.21.2",
+    "prettier-plugin-sql": "^0.19.2"
+  }
+}

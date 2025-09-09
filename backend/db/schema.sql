@@ -21,8 +21,8 @@ CREATE TABLE books (
 
 CREATE TABLE reservations (
   id serial PRIMARY KEY,
-  check_in date NOT NULL,
-  check_out date,
+  check_in DATE NOT NULL,
+  check_out DATE,
   user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-  book_id INTEGER NOT NULL REFERENCES books (id) ON DELETE CASCADE
+  book_id INTEGER UNIQUE NOT NULL REFERENCES books (id) ON DELETE CASCADE
 );
