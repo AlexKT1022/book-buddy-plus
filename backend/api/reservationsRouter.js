@@ -1,9 +1,10 @@
 import express from 'express';
 
+import { createReservationItem } from '#db/queries/reservationItemsQueries';
 import {
   createReservation,
   getReservationById,
-  getReservations,
+  getReservationsByUserId,
 } from '#db/queries/reservationQueries';
 import requireBody from '#middleware/requireBody';
 import requireUser from '#middleware/requireUser';
@@ -17,7 +18,7 @@ router.use(requireUser);
  * @route /reservations
  */
 router.get('/', async (req, res) => {
-  const reservations = await getReservations();
+  const reservations = await getReservationsByUserId(req.user.id);
 
   return res.send(reservations);
 });
@@ -26,9 +27,13 @@ router.get('/', async (req, res) => {
  * @method POST
  * @route /reservations
  */
-router.post('/', requireBody(['checkInDate', 'userId']), async (req, res) => {
+router.post('/', requireBody(['bookId']), async (req, res) => {
+  const { bookId } = req.body;
+  const userId = req.user.id;
   const checkInDate = new Date();
-  const newReservation = await createReservation(checkInDate, req.user.id);
+  const newReservation = await createReservation(checkInDate, userId);
+
+  await createReservationItem(newReservation.id, bookId);
 
   return res.status(201).send(newReservation);
 });
@@ -40,8 +45,24 @@ router.post('/', requireBody(['checkInDate', 'userId']), async (req, res) => {
 router.get('/:id', async (req, res) => {
   const reservation = await getReservationById(req.params.id);
   if (!reservation) return res.status(400).send('Reservation not found.');
+  if (reservation.userId !== req.user.id)
+    return res.status(403).send('Forbidden');
 
   return res.send(reservation);
+});
+
+// add multiple books to the reservation
+router.post('/:id/books', requireBody(['bookId']), async (req, res) => {
+  const { bookId } = req.body;
+  const reservation = await getReservationById(req.params.id);
+  if (!reservation) return res.status(400).send('Reservation not found.');
+
+  if (reservation.user_id !== req.user.id)
+    return res.status(403).send('Forbidden');
+
+  const itemBook = await createReservationItem(req.params.id, bookId);
+
+  return res.status(201).send(itemBook);
 });
 
 export default router;

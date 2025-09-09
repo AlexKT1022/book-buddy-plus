@@ -1,7 +1,10 @@
 import express from 'express';
 
 import { createBook, getBookById, getBooks } from '#db/queries/booksQueries';
-import { getReservationByBookId } from '#db/queries/reservationItemsQueries';
+import {
+  getReservationByBookId,
+  getReservationsByItem,
+} from '#db/queries/reservationItemsQueries';
 import requireBody from '../middleware/requireBody.js';
 import requireUser from '../middleware/requireUser.js';
 
@@ -25,6 +28,7 @@ router
     async (req, res) => {
       const { title, author, description, coverImage } = req.body;
       const userId = req.user?.id;
+
       if (!userId) return res.status(401).send('Unauthorized.');
 
       const books = await createBook(
@@ -53,8 +57,11 @@ router.route('/:id').get((req, res) => {
 
 router.route('/:id/reservations').get(requireUser, async (req, res) => {
   if (!req.params.id) return res.status(401).send('Invalid Book ID...');
-  if (req.user.id !== req.params.id)
-    return res.send(403).send('You are not authorized to be here!');
+
+  const reservations = await getReservationsByItem(req.user.id, req.params.id);
+
+  if (req.user.id !== reservations.user_id)
+    return res.status(403).send('You are not authorized to be here!');
 
   const bookReservations = await getReservationByBookId(req.params.id);
 

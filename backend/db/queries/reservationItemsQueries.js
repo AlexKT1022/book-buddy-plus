@@ -20,6 +20,21 @@ export const getReservationByBookId = async (bookId) => {
   return rows[0];
 };
 
+export const getReservationsByItem = async (userId, bookId) => {
+  const sql = `
+    SELECT
+      *
+    FROM
+      reservation_items
+      JOIN reservations ON reservations.id = reservation_items.reservation_id
+    WHERE
+      reservations.user_id = $1 and reservation_items.book_id=$2
+  `;
+  const { rows } = await db.query(sql, [userId, bookId]);
+
+  return rows[0];
+};
+
 /**
  * @param {number} reservationId
  * @method GET

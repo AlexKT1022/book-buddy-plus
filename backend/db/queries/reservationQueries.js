@@ -35,6 +35,20 @@ export const getReservationById = async (id) => {
   return rows[0];
 };
 
+export const getReservationsByUserId = async (userId) => {
+  const sql = `
+    SELECT
+      *
+    FROM
+      reservations
+    WHERE
+      user_id = $1
+  `;
+  const { rows } = await db.query(sql, [userId]);
+
+  return rows;
+};
+
 /**
  * Seeding function.
  * @param {Date} checkInDate

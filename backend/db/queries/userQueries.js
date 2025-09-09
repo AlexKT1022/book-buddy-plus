@@ -1,8 +1,9 @@
 import db from '#db/client';
+import bcrypt from 'bcrypt';
 
 /**
  * @method POST
- * @route /books
+ * @route /users
  */
 export const createUser = async (firstName, lastName, email, password) => {
   const sql = `
@@ -13,7 +14,13 @@ export const createUser = async (firstName, lastName, email, password) => {
     RETURNING
       *
   `;
-  const { rows } = await db.query(sql, [firstName, lastName, email, password]);
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const { rows } = await db.query(sql, [
+    firstName,
+    lastName,
+    email,
+    hashedPassword,
+  ]);
 
   return rows[0];
 };
