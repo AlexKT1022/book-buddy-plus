@@ -5,7 +5,6 @@ import booksRouter from '#api/booksRouter';
 import reservationsRouter from '#api/reservationsRouter';
 import usersRouter from '#api/usersRouter';
 import errorHandler from '#middleware/errorHandler';
-
 const app = express();
 
 app.use(express.json());

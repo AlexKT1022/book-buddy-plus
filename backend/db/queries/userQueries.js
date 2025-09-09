@@ -1,5 +1,9 @@
 import db from '#db/client';
 
+/**
+ * @method POST
+ * @route /books
+ */
 export const createUser = async (firstName, lastName, email, password) => {
   const sql = `
     INSERT INTO
@@ -12,4 +16,47 @@ export const createUser = async (firstName, lastName, email, password) => {
   const { rows } = await db.query(sql, [firstName, lastName, email, password]);
 
   return rows[0];
+};
+
+/**
+ * @method GET
+ * @route /users/:id
+ * @param {number} password
+ */
+export const getUserById = async (id) => {
+  const sql = `
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      id = $1
+  `;
+  const { rows } = await db.query(sql, [id]);
+
+  return rows[0];
+};
+
+/**
+ * @method GET
+ * @param {string} email
+ * @param {string} password
+ * @returns
+ */
+export const getUserByCredentials = async (email, password) => {
+  const sql = `
+    SELECT
+      *
+    FROM
+      users
+    WHERE
+      email = $1
+  `;
+  const { rows } = await db.query(sql, [email]);
+  const user = rows[0];
+  if (!user) return;
+
+  // const isValid = await bcrypt.compare(password, user.password);
+  // if (!isValid) return null;
+  return user;
 };

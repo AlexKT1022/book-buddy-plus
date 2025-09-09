@@ -1,5 +1,46 @@
 import db from '#db/client';
 
+/**
+ * @method GET
+ * @route /reservations
+ */
+export const getReservations = async () => {
+  const sql = `
+    SELECT
+      *
+    FROM
+      reservations
+  `;
+  const { rows } = await db.query(sql);
+
+  return rows;
+};
+
+/**
+ * @param {number} id
+ * @method GET
+ * @route /reservations/:id
+ */
+export const getReservationById = async (id) => {
+  const sql = `
+    SELECT
+      *
+    FROM
+      reservations
+    WHERE
+      id = $1
+  `;
+  const { rows } = await db.query(sql, [id]);
+
+  return rows[0];
+};
+
+/**
+ * Seeding function.
+ * @param {Date} checkInDate
+ * @param {number} userId
+ * @method POST
+ */
 export const createReservation = async (checkInDate, userId) => {
   const sql = `
     INSERT INTO

@@ -18,6 +18,7 @@ CREATE TABLE books (
   id serial PRIMARY KEY,
   title TEXT UNIQUE NOT NULL,
   author TEXT NOT NULL,
+  description TEXT,
   cover_image TEXT
 );
 

@@ -16,8 +16,8 @@ const fetchBooks = async () => {
 const seed = async () => {
   const books = await fetchBooks();
 
-  for (const { title, author, coverimage } of books) {
-    await createBook(title, author, coverimage);
+  for (const { title, author, description, coverimage } of books) {
+    await createBook(title, author, description, coverimage);
   }
 
   const user = await createUser(
