@@ -28,7 +28,7 @@ export const createUser = async (firstName, lastName, email, password) => {
 /**
  * @method GET
  * @route /users/:id
- * @param {number} password
+ * @param {number} id
  */
 export const getUserById = async (id) => {
   const sql = `
@@ -60,10 +60,12 @@ export const getUserByCredentials = async (email, password) => {
       email = $1
   `;
   const { rows } = await db.query(sql, [email]);
+
   const user = rows[0];
   if (!user) return;
 
-  // const isValid = await bcrypt.compare(password, user.password);
-  // if (!isValid) return null;
+  const isValid = await bcrypt.compare(password, user.password);
+  if (!isValid) return null;
+
   return user;
 };

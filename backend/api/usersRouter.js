@@ -1,10 +1,42 @@
 import express from 'express';
 
-import { createUser, getUserByCredentials } from '#db/queries/userQueries';
+import {
+  createUser,
+  getUserByCredentials,
+  getUserById,
+} from '#db/queries/userQueries';
+
+import { getReservationItemsByUserId } from '#db/queries/reservationItemsQueries';
 import requireBody from '#middleware/requireBody';
 import { createToken } from '#utils/jwt';
 
 const router = express.Router();
+
+/**
+ * @method GET
+ * @route /users/:id
+ */
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  const user = await getUserById(id);
+  if (!user) return res.status(404).send('User not found');
+
+  const userData = {
+    id,
+    firstName: user.first_name,
+    lastName: user.last_name,
+    email: user.email,
+  };
+
+  return res.send(userData);
+});
+
+router.get('/:id/reservations', async (req, res) => {
+  const { id } = req.params;
+  const reservationItems = await getReservationItemsByUserId(id);
+
+  return res.send(reservationItems);
+});
 
 /**
  * @method POST
@@ -33,7 +65,7 @@ router.post('/login', requireBody(['email', 'password']), async (req, res) => {
 
   const token = createToken({ id: user.id });
 
-  return res.status(200).send(token);
+  return res.status(200).send({ token });
 });
 
 export default router;

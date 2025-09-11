@@ -55,6 +55,23 @@ export const getBooksByReservationId = (reservationId) => {
   return rows[0];
 };
 
+export const getReservationItemsByUserId = async (userId) => {
+  const sql = `
+    SELECT
+      books.*, reservations.check_in, reservations.check_out
+    FROM
+      users
+      JOIN reservations ON users.id = reservations.user_id
+      JOIN reservation_items ON reservations.id = reservation_items.reservation_id
+      JOIN books ON reservation_items.book_id = books.id
+    WHERE
+      users.id = $1;
+  `;
+  const { rows } = await db.query(sql, [userId]);
+
+  return rows;
+};
+
 /**
  * Seeding function.
  * @param {number} reservationId
