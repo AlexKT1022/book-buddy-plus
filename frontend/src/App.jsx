@@ -1,20 +1,20 @@
-import "bootstrap/dist/css/bootstrap.css";
-import { createBrowserRouter } from "react-router";
+import 'bootstrap/dist/css/bootstrap.css';
+import { createBrowserRouter } from 'react-router';
 
-import bookLoader from "./api/loaders/bookLoader";
-import booksLoader from "./api/loaders/booksLoader";
-import userLoader from "./api/loaders/userLoader";
-import RootLayout from "./layouts/RootLayout";
-import AccountPage from "./pages/AccountPage";
-import LoginPage from "./pages/auth/LoginPage";
-import RegisterPage from "./pages/auth/RegisterPage";
-import BookPage from "./pages/books/BookPage";
-import BooksPage from "./pages/books/BooksPage";
-import NotFoundPage from "./pages/NotFoundPage";
+import bookLoader from './api/loaders/bookLoader';
+import booksLoader from './api/loaders/booksLoader';
+import userLoader from './api/loaders/userLoader';
+import RootLayout from './layouts/RootLayout';
+import AccountPage from './pages/AccountPage';
+import LoginPage from './pages/auth/LoginPage';
+import RegisterPage from './pages/auth/RegisterPage';
+import BookPage from './pages/books/BookPage';
+import BooksPage from './pages/books/BooksPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 const routes = [
   {
-    path: "/",
+    path: '/',
     Component: RootLayout,
     children: [
       {
@@ -23,30 +23,30 @@ const routes = [
         loader: booksLoader,
       },
       {
-        path: "books",
+        path: 'books',
         Component: BooksPage,
         loader: booksLoader,
       },
       {
-        path: "books/:id",
+        path: 'books/:id',
         Component: BookPage,
         loader: bookLoader,
       },
       {
-        path: "account",
+        path: 'account',
         Component: AccountPage,
         loader: userLoader,
       },
       {
-        path: "register",
+        path: 'register',
         Component: RegisterPage,
       },
       {
-        path: "login",
+        path: 'login',
         Component: LoginPage,
       },
       {
-        path: "*",
+        path: '*',
         Component: NotFoundPage,
       },
     ],
