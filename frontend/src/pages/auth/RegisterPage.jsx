@@ -1,22 +1,32 @@
 import { Link, useNavigate } from 'react-router';
 
-const RegisterPage = () => {
-  const { register } = useAuth();
-  const navigate = useNavigate();
+import { useAuth } from '../../context/AuthContext';
 
-  const tryRegister = async (formdata) => {
-    const firstname = formData.get('firstname');
-    const lastname = formData.get('lastname');
-    const email = formData.get('email');
-    const password = formData.get('password');
-    await register({ firstname, lastname, email, password });
-    navigate('books');
+const RegisterPage = () => {
+  const navigate = useNavigate();
+  const { register } = useAuth();
+
+  const handleRegister = async (FormData) => {
+    const firstname = FormData.get('firstname');
+    const lastname = FormData.get('lastname');
+    const email = FormData.get('email');
+    const password = FormData.get('password');
+    const credentials = {
+      firstname,
+      lastname,
+      email,
+      password,
+    };
+
+    await register(credentials);
+
+    // navigate('/books');
   };
 
   return (
-    <>
-      <h1>Resgister for an account</h1>
-      <form action='tryRegister'>
+    <div className='register-container'>
+      <h1>Register for an account</h1>
+      <form action={handleRegister}>
         <label>
           First Name
           <input type='text' name='firstname' required />
@@ -35,8 +45,8 @@ const RegisterPage = () => {
         </label>
         <button type='submit'>Register</button>
       </form>
-      <Link to='./login'>Already hace an account? Log in here</Link>
-    </>
+      <Link to='/login'>Already have an account? Log in here</Link>
+    </div>
   );
 };
 

@@ -6,6 +6,7 @@
   "keywordCase": "upper",
   "language": "postgresql",
   "plugins": [
+    "prettier-plugin-css-order",
     "prettier-plugin-embed",
     "prettier-plugin-organize-imports",
     "prettier-plugin-pkg",

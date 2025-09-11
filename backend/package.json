@@ -16,9 +16,9 @@
   "scripts": {
     "db:reset": "npm run db:schema && npm run db:seed",
     "db:schema": "psql -d book_buddy -f db/schema.sql",
-    "db:seed": "node --env-file=../.env db/seed.js",
-    "dev": "node --watch --env-file=../.env server.js",
-    "start": "node --env-file=../.env server.js",
+    "db:seed": "node --env-file=.env db/seed.js",
+    "dev": "node --watch --env-file=.env server.js",
+    "start": "node --env-file=.env server.js",
     "test": "vitest"
   },
   "dependencies": {

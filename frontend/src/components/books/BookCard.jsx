@@ -2,10 +2,16 @@ import { Link } from 'react-router';
 
 const BookCard = ({ book }) => {
   return (
-    <li className='card'>
-      <img src={book.cover_image} />
-      <Link to={`/books/${book.id}`}>{book.title}</Link>
-    </li>
+    <Link to={`/books/${book.id}`}>
+      <li className='card'>
+        <img src={book.cover_image} alt={book.title} />
+        <p>{book.title}</p>
+        <p className='card-author'>
+          <span>by: </span>
+          {book.author}
+        </p>
+      </li>
+    </Link>
   );
 };
 
