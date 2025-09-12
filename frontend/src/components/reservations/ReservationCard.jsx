@@ -1,7 +1,9 @@
 const ReservationCard = ({ reservation }) => {
   return (
     <li className='reservations-items'>
-      {reservation.title} {reservation.author}
+      <p>{reservation.title}</p>
+      <p>{reservation.author}</p>
+      <button>Return Book</button>
     </li>
   );
 };

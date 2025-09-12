@@ -7,13 +7,13 @@ const RegisterPage = () => {
   const { register } = useAuth();
 
   const handleRegister = async (FormData) => {
-    const firstname = FormData.get('firstname');
-    const lastname = FormData.get('lastname');
+    const firstName = FormData.get('first-name');
+    const lastName = FormData.get('last-name');
     const email = FormData.get('email');
     const password = FormData.get('password');
     const credentials = {
-      firstname,
-      lastname,
+      firstName,
+      lastName,
       email,
       password,
     };
@@ -29,11 +29,11 @@ const RegisterPage = () => {
       <form action={handleRegister}>
         <label>
           First Name
-          <input type='text' name='firstname' required />
+          <input type='text' name='first-name' required />
         </label>
         <label>
           Last Name
-          <input type='text' name='lasttname' required />
+          <input type='text' name='last-name' required />
         </label>
         <label>
           Email

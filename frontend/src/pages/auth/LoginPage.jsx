@@ -16,7 +16,7 @@ const LoginPage = () => {
 
     await login(credentials);
 
-    // navigate('/books');
+    navigate('/books');
   };
 
   return (

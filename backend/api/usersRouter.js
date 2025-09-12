@@ -50,7 +50,7 @@ router.post(
     const user = await createUser(firstName, lastName, email, password);
     const token = createToken({ id: user.id });
 
-    return res.status(201).send(token);
+    return res.status(201).send({ token });
   }
 );
 

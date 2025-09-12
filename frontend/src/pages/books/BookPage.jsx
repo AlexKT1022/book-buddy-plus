@@ -1,39 +1,54 @@
 import { useLoaderData, useNavigate } from 'react-router';
-// import { useAuth } from '../../Context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
+import { toast, Bounce } from 'react-toastify';
 
 // I used bootstrap for styling, if we stick with that will need to import bootstrap, we can also style traditionally with css if preferred.
 // Reservation endpoint needs to be properly set up.
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const BookPage = () => {
-  const book = useLoaderData(); // I think the tables are as follows, I cant remember if its cover_image or coverimage so for now I am going to make a conditional statement for both, if anything else is off I will need to adjust { id, title, author, description, cover_image?, coverimage? available }
-  const { token } = 'token';
+  const bookData = useLoaderData(); // I think the tables are as follows, I cant remember if its cover_image or coverimage so for now I am going to make a conditional statement for both, if anything else is off I will need to adjust { id, title, author, description, cover_image?, coverimage? available }
+  const { token } = useAuth();
   const navigate = useNavigate();
+
+  const notify = () =>
+    toast('📚 Book Reserved!', {
+      position: 'bottom-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: false,
+      theme: 'light',
+      transition: Bounce,
+    });
 
   const handleReserve = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/reservations`, {
+      const res = await fetch(`${API_BASE}/reservations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({ bookId: book?.id }),
+        body: JSON.stringify({ bookId: bookData?.id }),
       });
+
+      notify();
 
       if (!res.ok) {
         const msg = await res.text().catch(() => '');
         throw new Error(msg || `Reservation failed (${res.status})`);
       }
 
-      navigate(`/Books/${book.id}`);
+      navigate(`/books/${bookData.id}`);
     } catch (err) {
       console.error(err);
       alert('Could not reserve the book. Please try again.');
     }
   };
 
-  if (!book) {
+  if (!bookData) {
     return (
       <div className='container'>
         <p>Loading…</p>
@@ -41,8 +56,7 @@ const BookPage = () => {
     );
   }
 
-  const coverSrc = book.cover_image || book.coverimage || '';
-  const isAvailable = Boolean(book.available);
+  const coverSrc = bookData.cover_image || bookData.coverimage || '';
 
   return (
     <div className='book-details-container'>
@@ -52,20 +66,22 @@ const BookPage = () => {
             <img
               className='book-details-img'
               src={coverSrc}
-              alt={`cover image of ${book.title}`}
+              alt={`cover image of ${bookData.title}`}
             />
           ) : null}
         </figure>
       </div>
 
-      <div className='container col-md-8 col-lg-6 border'>
-        <section className='text-left'>
-          <h1>{book.title}</h1>
-          <p className='lead'>{book.author}</p>
-          <p className='lead'>{book.description}</p>
+      <div className=''>
+        <section className=''>
+          <h1>{bookData.title}</h1>
+          <p className='lead'>
+            <strong>Written by:</strong> <em>{bookData.author}</em>
+          </p>
+          <p className='lead'>{bookData.description}</p>
 
           {token ? (
-            isAvailable ? (
+            !bookData.isReserved ? (
               <button
                 onClick={handleReserve}
                 className='btn btn-outline-primary'
@@ -73,11 +89,13 @@ const BookPage = () => {
                 Reserve this book
               </button>
             ) : (
-              <button className='btn btn-outline-primary' disabled>
+              <button className='btn btn-outline-danger' disabled>
                 Book is already reserved
               </button>
             )
-          ) : null}
+          ) : (
+            <></>
+          )}
         </section>
       </div>
     </div>

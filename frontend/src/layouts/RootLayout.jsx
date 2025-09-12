@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router';
 
+import { ToastContainer } from 'react-toastify';
 import Navbar from '../components/Navbar';
 
 const RootLayout = () => {
@@ -8,6 +9,7 @@ const RootLayout = () => {
       <Navbar />
       <main>
         <Outlet />
+        <ToastContainer />
       </main>
     </>
   );

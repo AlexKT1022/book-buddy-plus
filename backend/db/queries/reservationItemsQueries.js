@@ -58,7 +58,7 @@ export const getBooksByReservationId = (reservationId) => {
 export const getReservationItemsByUserId = async (userId) => {
   const sql = `
     SELECT
-      books.*, reservations.check_in, reservations.check_out
+      books.*, reservations.check_out, reservations.check_in
     FROM
       users
       JOIN reservations ON users.id = reservations.user_id
@@ -70,6 +70,21 @@ export const getReservationItemsByUserId = async (userId) => {
   const { rows } = await db.query(sql, [userId]);
 
   return rows;
+};
+
+export const checkReservationStatus = async (bookId) => {
+  const sql = `
+    SELECT
+      *
+    FROM
+      reservation_items
+    WHERE
+      book_id = $1;
+  `;
+  const { rows } = await db.query(sql, [bookId]);
+  if (!rows || rows.length === 0) return false;
+
+  return true;
 };
 
 /**

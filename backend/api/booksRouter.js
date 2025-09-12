@@ -2,6 +2,7 @@ import express from 'express';
 
 import { createBook, getBookById, getBooks } from '#db/queries/booksQueries';
 import {
+  checkReservationStatus,
   getReservationByBookId,
   getReservationsByItem,
 } from '#db/queries/reservationItemsQueries';
@@ -43,19 +44,23 @@ router
   );
 
 router.param('id', async (req, res, next, id) => {
-  const books = await getBookById(id);
-  if (!books) return res.status(403).send('Book not found.');
+  const book = await getBookById(id);
+  if (!book) return res.status(403).send('Book not found.');
 
-  req.books = books;
+  req.book = book;
 
   next();
 });
 
-router.route('/:id').get((req, res) => {
-  return res.status(201).send(req.books);
+router.route('/:id').get(async (req, res) => {
+  const { id } = req.book;
+  const reservationStatus = await checkReservationStatus(id);
+  const bookObj = { ...req.book, isReserved: reservationStatus };
+
+  return res.status(201).send(bookObj);
 });
 
-router.route('/:id/reservations').get(requireUser, async (req, res) => {
+router.get('/:id/reservations', requireUser, async (req, res) => {
   if (!req.params.id) return res.status(401).send('Invalid Book ID...');
 
   const reservations = await getReservationsByItem(req.user.id, req.params.id);
@@ -66,6 +71,13 @@ router.route('/:id/reservations').get(requireUser, async (req, res) => {
   const bookReservations = await getReservationByBookId(req.params.id);
 
   return res.send(bookReservations);
+});
+
+router.get('/:id/status', async (req, res) => {
+  const { id } = req.book;
+  const reservationStatus = await checkReservationStatus(id);
+
+  return res.send({ isReserved: reservationStatus });
 });
 
 export default router;

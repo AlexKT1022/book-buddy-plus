@@ -55,14 +55,26 @@ export const getReservationsByUserId = async (userId) => {
  * @param {number} userId
  * @method POST
  */
-export const createReservation = async (checkInDate, userId) => {
+export const createReservation = async (checkOutDate, userId) => {
   const sql = `
     INSERT INTO
-      reservations (check_in, user_id)
+      reservations (check_out, user_id)
     VALUES
       ($1, $2)
     RETURNING
       *
+  `;
+  const { rows } = await db.query(sql, [checkOutDate, userId]);
+
+  return rows[0];
+};
+
+export const updateReservation = async (checkInDate, userId) => {
+  const sql = `
+    update reservations
+    set check_in = $1
+    where user_id = $2
+    returning *;
   `;
   const { rows } = await db.query(sql, [checkInDate, userId]);
 

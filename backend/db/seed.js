@@ -26,8 +26,8 @@ const seed = async () => {
     'email@email.com',
     'password'
   );
-  const checkInDate = new Date();
-  const reservation = await createReservation(checkInDate, user.id);
+  const checkOutDate = new Date();
+  const reservation = await createReservation(checkOutDate, user.id);
 
   for (let i = 0; i < 5; i++) {
     const randomBook = await getRandomBook();
