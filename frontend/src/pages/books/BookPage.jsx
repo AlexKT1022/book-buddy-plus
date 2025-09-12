@@ -1,6 +1,6 @@
 import { useLoaderData, useNavigate } from 'react-router';
+import { Bounce, toast } from 'react-toastify';
 import { useAuth } from '../../context/AuthContext';
-import { toast, Bounce } from 'react-toastify';
 
 // I used bootstrap for styling, if we stick with that will need to import bootstrap, we can also style traditionally with css if preferred.
 // Reservation endpoint needs to be properly set up.

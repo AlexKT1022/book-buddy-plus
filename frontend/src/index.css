@@ -310,24 +310,24 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 3px;
   border-bottom: 1px solid lightgrey;
+  padding: 3px;
 }
 
 .reservations-items button {
-  height: 1.8rem;
-  font-size: 0.8rem;
+  transition: background-color 0.2s ease-in-out;
   border: none;
   background-color: #218838;
+  height: 1.8rem;
   color: white;
-  transition: background-color 0.2s ease-in-out;
+  font-size: 0.8rem;
 }
 
 .reservations-items button:hover {
-  height: 1.8rem;
-  font-size: 0.8rem;
   border: none;
   background-color: #007bff;
+  height: 1.8rem;
+  font-size: 0.8rem;
 }
 
 .reservations-items p {
